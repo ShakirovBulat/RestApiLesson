@@ -14,7 +14,7 @@ namespace RestApiLesson.IRest
         HttpClient client;
         JsonSerializerOptions serializerOptions;
 
-        public List<TodoItem> Items { get; private set; }
+        public  CountModel Items { get; private set; }
 
         public RestService()
         {
@@ -28,7 +28,7 @@ namespace RestApiLesson.IRest
 
         public async Task<List<TodoItem>> RefreshDataAsync()
         {
-            Items = new List<TodoItem>();
+            Items = new CountModel();
 
             Uri uri = new Uri(string.Format(Constants.RestUrl, string.Empty));
             try
@@ -37,7 +37,7 @@ namespace RestApiLesson.IRest
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    Items = JsonSerializer.Deserialize<List<TodoItem>>(content, serializerOptions);
+                    Items = JsonSerializer.Deserialize<CountModel>(content, serializerOptions);
                 }
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace RestApiLesson.IRest
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
 
-            return Items;
+            return Items.entries;
         }
     }
 }
